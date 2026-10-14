@@ -131,6 +131,14 @@ export const DOCS_TABS: DocsTab[] = [
     hint: "products · prices · webhooks",
   },
   {
+    label: "Boat",
+    href: "/boat",
+    prefixes: ["/boat", "/providers/boat"],
+    slot: "more",
+    category: "Sandboxes",
+    hint: "environments · snapshots · webhooks",
+  },
+  {
     label: "Docker",
     href: "/docker",
     prefixes: ["/docker", "/providers/docker"],

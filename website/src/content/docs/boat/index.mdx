@@ -1,0 +1,104 @@
+---
+title: Boat
+description: Boat sandbox environments, base snapshots, webhooks, API keys, and credential profiles as Stack resources.
+---
+
+[Boat](https://boat.dev) runs cloud sandboxes: Linux machines with a disk
+that survives stop and resume. Sandboxes themselves are created and
+deleted by your application at runtime. What they start from is
+infrastructure: the environment they get, the snapshot they boot, the
+credentials they hold, and the webhook that hears about them. Alchemy
+manages those as resources.
+
+New here? [Set up credentials](/boat/setup) first.
+
+## Resources
+
+```typescript
+import * as Alchemy from "alchemy";
+import * as Boat from "alchemy/Boat";
+import * as Config from "effect/Config";
+import * as Effect from "effect/Effect";
+
+export default Alchemy.Stack(
+  "Runners",
+  {
+    providers: Boat.providers(),
+    state: Alchemy.localState(),
+  },
+  Effect.gen(function* () {
+    const profile = yield* Boat.CredentialProfile("Agents", {
+      keys: { "anthropic-api-key": yield* Config.Redacted("ANTHROPIC_API_KEY") },
+    });
+
+    const env = yield* Boat.Environment("Runner", {
+      credentialProfileId: profile.profileId,
+      vars: { LOG_LEVEL: "info" },
+      repositories: [{ repository: "acme/app", baseBranch: "main" }],
+    });
+
+    const image = yield* Boat.NamedSnapshot("RunnerImage", {
+      setupScript: "curl -fsSL https://bun.sh/install | bash",
+    });
+
+    const key = yield* Boat.ApiKey("Worker", {
+      preset: "full-sandbox",
+      environmentIds: [env.environmentId],
+    });
+
+    yield* Boat.Webhook("Lifecycle", {
+      url: "https://hooks.example.com/boat",
+      events: ["sandbox.ready", "sandbox.error"],
+    });
+
+    return { environment: env.name, image: image.name, apiKey: key.secret };
+  }),
+);
+```
+
+Your application then creates sandboxes with `environment: env.name` and
+`from: image.name`, authenticated with the scoped key.
+
+Names are optional everywhere. Omit them and Alchemy generates unique
+names from the Stack, stage, and resource name.
+
+## Environments
+
+An `Environment` bundles what a sandbox gets: variables, secret files,
+GitHub repositories, which credentials pass through, and the credential
+profile. Every deploy that changes it mints one new immutable version.
+Existing sandboxes stay on their version unless you set
+`upgradeSandboxes: true`.
+
+Omit `vars`, `secretFiles`, `repositories`, or a flag to leave it as Boat
+has it. Pass it to manage it completely: `vars: {}` removes every
+variable.
+
+## Named snapshots
+
+A `NamedSnapshot` is a frozen sandbox disk that new sandboxes boot from.
+Give it a `setupScript` and Alchemy builds it: it creates a sandbox with
+none of the account's secrets, runs the script, saves the disk under the
+name, and deletes the sandbox. Change the script, `type`, or `from` and
+the next deploy rebuilds it under the same name. Pass `sandboxId` instead
+to save a sandbox you prepared yourself.
+
+Everything on the disk ships with the snapshot, so keep secrets in the
+environment, not in the image.
+
+## Secrets
+
+Variable values, secret file contents, credential keys, custom API
+values, the webhook signing secret, and API key secrets are `Redacted`
+values. Boat never returns the secrets you send, so Alchemy compares them
+with the values from the last deploy and only keeps names in a resource's
+attributes. The secrets Boat returns once, the webhook signing secret and
+an API key, live in state as `Redacted` values. Use an encrypted
+[state store](/state-store) when you deploy them.
+
+## Adoption
+
+Boat has no tags. A resource found under a name you chose, with no
+Alchemy state, is refused unless you [adopt](/infrastructure-as-code/resource-lifecycle)
+it. An adopted webhook or API key has its secret rotated, because Boat
+only reveals it once.

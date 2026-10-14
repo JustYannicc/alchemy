@@ -64,6 +64,7 @@ export const TAB_ICONS: Record<string, string | undefined> = {
   GitHub: b("github"),
   Git: c("git"),
   Stripe: c("stripe"),
+  Boat: l("sailboat"),
   Docker: b("docker"),
   Kubernetes: b("kubernetes"),
   Drizzle: b("drizzle"),
@@ -130,6 +131,7 @@ const GROUP_ICONS: Record<string, string | undefined> = {
   Migrations: l("list-ordered"),
   Command: l("square-terminal"),
   Stripe: c("stripe"),
+  Boat: l("sailboat"),
 };
 
 /**

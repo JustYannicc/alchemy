@@ -47,6 +47,7 @@ function providersSidebarEntry() {
       { label: "Axiom", link: "/axiom" },
       { label: "GitHub", link: "/github" },
       { label: "Stripe", link: "/stripe" },
+      { label: "Boat", link: "/boat" },
       { label: "Docker", link: "/docker" },
       { label: "Kubernetes", link: "/kubernetes" },
       { label: "SQL", link: "/sql" },
@@ -1395,6 +1396,14 @@ export default defineConfig({
               ],
             },
             providerApiReferenceEntry("Prisma"),
+          ],
+        },
+        {
+          label: "Boat",
+          items: [
+            { label: "Overview", link: "/boat" },
+            { label: "Setup", link: "/boat/setup" },
+            providerResourcesEntry("Boat"),
           ],
         },
         {

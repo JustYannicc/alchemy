@@ -89,6 +89,7 @@
     "./Planetscale/*": "./src/Planetscale/*/index.ts",
     "./Stripe": "./src/Stripe/index.ts",
     "./Turso": "./src/Turso/index.ts",
+    "./Boat": "./src/Boat/index.ts",
     "./Runtime/Bootstrap/*": "./src/Runtime/Bootstrap/*.ts",
     "./Process": "./src/Process/index.ts",
     "./Redis": "./src/Redis/index.ts",
@@ -352,6 +353,11 @@
         "bun": "./src/Turso/index.ts",
         "default": "./lib/Turso/index.js"
       },
+      "./Boat": {
+        "types": "./lib/Boat/index.d.ts",
+        "bun": "./src/Boat/index.ts",
+        "default": "./lib/Boat/index.js"
+      },
       "./Runtime/Bootstrap/*": {
         "types": "./src/Runtime/Bootstrap/*.ts",
         "bun": "./src/Runtime/Bootstrap/*.ts",
@@ -418,6 +424,7 @@
     "@distilled.cloud/acme": "workspace:*",
     "@distilled.cloud/aws": "workspace:*",
     "@distilled.cloud/axiom": "workspace:*",
+    "@distilled.cloud/boat-dev": "workspace:*",
     "@distilled.cloud/cloudflare": "workspace:*",
     "@distilled.cloud/core": "workspace:*",
     "@distilled.cloud/doppler": "workspace:*",

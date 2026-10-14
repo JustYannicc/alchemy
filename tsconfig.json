@@ -21,6 +21,9 @@
       "path": "./submodules/distilled/packages/turso/tsconfig.json"
     },
     {
+      "path": "./submodules/distilled/packages/boat-dev/tsconfig.json"
+    },
+    {
       "path": "./submodules/distilled/packages/axiom/tsconfig.json"
     },
     {

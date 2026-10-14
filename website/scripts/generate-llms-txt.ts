@@ -508,6 +508,14 @@ const SECTIONS: Section[] = [
     },
   },
   {
+    heading: "Boat",
+    intro:
+      "Boat sandbox infrastructure as Stack resources: environments with their variables, secret files and repositories, named snapshots built from a setup script, webhooks, scoped API keys, and credential profiles.",
+    pages: {
+      slugs: ["boat/index", "boat/setup"],
+    },
+  },
+  {
     heading: "Docker",
     intro:
       "Local and CI Docker as Stack resources — images, containers, networks, and volumes driven through the active Docker CLI context; cloud container runtimes (Cloudflare Containers, ECS) consume the pushed image refs from their own hubs.",

@@ -1,0 +1,51 @@
+---
+title: Setup
+description: Give Alchemy a Boat API key.
+---
+
+Sign up at [boat.dev](https://boat.dev), then create an API key in the dashboard.
+
+Use an unrestricted account key, or one with the `admin` preset. Credential profiles need `account.admin`, creating scoped API keys needs an admin key, and Boat only lists API keys to unrestricted keys.
+
+## Add the provider
+
+Add `Boat.providers()` next to your cloud's providers:
+
+```typescript
+// alchemy.run.ts
+import * as Boat from "alchemy/Boat";
+
+providers: Layer.mergeAll(Cloudflare.providers(), Boat.providers()),
+```
+
+## Store the key in a profile
+
+```sh
+alchemy profile edit --add Boat
+```
+
+Paste the key when asked. See [Profiles](/environments/profiles) to learn how profiles work.
+
+## Use environment variables in CI
+
+Set `BOAT_API_KEY` and Alchemy uses it instead of your profile:
+
+```sh
+BOAT_API_KEY=... alchemy deploy
+```
+
+`BOAT_API_BASE_URL` overrides the API base URL.
+
+## Pass a key in code
+
+Use a key you already have, for example in tests:
+
+```typescript
+Effect.provide(Boat.fromApiKey({ apiKey: Redacted.make("...") }));
+```
+
+`apiKey` can be a string or a `Redacted` value.
+
+## Next steps
+
+- [Boat overview](/boat)
